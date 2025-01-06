@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Buyer Dashboard</title>
+    <!-- CSS Files -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+    />
+    <style>
+      body {
+        background-color: #f8f9fa;
+        font-family: "Arial", sans-serif;
+      }
+      .navbar {
+        background-color: #000;
+      }
+      .navbar-brand,
+      .logout-btn {
+        color: white !important;
+      }
+      .tabs-container {
+        margin-top: 80px;
+      }
+      .nav-tabs .nav-link {
+        color: black;
+        border: 1px solid #ddd;
+        margin-right: 5px;
+        padding: 10px 15px;
+        text-align: center;
+        font-weight: bold;
+        transition: all 0.3s;
+      }
+      .nav-tabs .nav-link.active {
+        background-color: #000;
+        color: #fff;
+        border-color: #000;
+      }
+      .nav-tabs .nav-link:hover {
+        background-color: #ddd;
+        color: #000;
+      }
+      .tab-content {
+        margin-top: 20px;
+      }
+      .tab-pane {
+        padding: 20px;
+        background: #fff;
+        border: 1px solid #ddd;
+        border-top: none;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+      .add-deal-form {
+        padding: 20px;
+        background: #fff;
+        border: 1px solid #ddd;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        height: 100%;
+      }
+      .active-deals-content {
+        display: flex;
+        justify-content: space-between;
+      }
+      .active-deals-list {
+        width: 65%;
+      }
+      .deal-card {
+        border: 1px solid #ddd;
+        padding: 15px;
+        margin-bottom: 10px;
+        background-color: #fdfdfd;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      .bid-card {
+        border: 1px solid #bbb;
+        padding: 10px;
+        margin-bottom: 10px;
+        background-color: #f7f7f7;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+      <div class="container">
+        <a class="navbar-brand" href="#">Buyer Dashboard</a>
+        <div class="ms-auto">
+          <button class="btn btn-sm btn-outline-light logout-btn">
+            Logout
+          </button>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container tabs-container">
+      <ul class="nav nav-tabs" id="buyerTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button
+            class="nav-link active"
+            id="active-deals-tab"
+            data-bs-toggle="tab"
+            data-bs-target="#active-deals"
+            type="button"
+            role="tab"
+            aria-controls="active-deals"
+            aria-selected="true"
+          >
+            View Active Deals
+          </button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button
+            class="nav-link"
+            id="closed-deals-tab"
+            data-bs-toggle="tab"
+            data-bs-target="#closed-deals"
+            type="button"
+            role="tab"
+            aria-controls="closed-deals"
+            aria-selected="false"
+          >
+            Check Closed Deals
+          </button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button
+            class="nav-link"
+            id="previous-deals-tab"
+            data-bs-toggle="tab"
+            data-bs-target="#previous-deals"
+            type="button"
+            role="tab"
+            aria-controls="previous-deals"
+            aria-selected="false"
+          >
+            View Previous Deals
+          </button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button
+            class="nav-link"
+            id="overall-profit-tab"
+            data-bs-toggle="tab"
+            data-bs-target="#overall-profit"
+            type="button"
+            role="tab"
+            aria-controls="overall-profit"
+            aria-selected="false"
+          >
+            Check Overall Profit
+          </button>
+        </li>
+      </ul>
+
+      <div class="tab-content" id="buyerTabsContent">
+        <div
+          class="tab-pane fade show active"
+          id="active-deals"
+          role="tabpanel"
+          aria-labelledby="active-deals-tab"
+        >
+          <div class="active-deals-content">
+            <!-- Active Deals List -->
+            <div id="active-deals-list" class="active-deals-list">
+              <h3>Active Deals</h3>
+              {% if active_deals %}
+              <ul class="list-group">
+                {% for deal in active_deals %}
+                <li
+                  class="list-group-item deal-card"
+                  data-deal-id="{{ deal[0] }}"
+                >
+                  <p><strong>Description:</strong> {{ deal[1] }}</p>
+                  <p><strong>Budget:</strong> ₹{{ deal[2] }}</p>
+                  <div style="display: flex; gap: 10px">
+                    <!-- Form for View Bids -->
+                    <form method="POST" action="/view_bids" style="margin: 0">
+                      <input
+                        type="hidden"
+                        name="deal_id"
+                        value="{{ deal[0] }}"
+                      />
+                      <button type="submit" class="btn btn-secondary btn-sm">
+                        View Bids
+                      </button>
+                    </form>
+
+                    <!-- Remove Deal Button -->
+                    <form method="POST" action="/remove_deal" style="margin: 0">
+                      <input
+                        type="hidden"
+                        name="deal_id"
+                        value="{{ deal[0] }}"
+                      />
+                      <input
+                        type="hidden"
+                        name="username"
+                        value="{{ username }}"
+                      />
+                      <button type="submit" class="btn btn-danger btn-sm">
+                        Remove Deal
+                      </button>
+                    </form>
+                  </div>
+                </li>
+                {% endfor %}
+              </ul>
+
+              {% else %}
+              <p>No active deals found.</p>
+              {% endif %}
+            </div>
+
+            <!-- Add New Deal Form -->
+            <!-- Add New Deal Form -->
+            <div class="add-deal-form">
+              <h5>Add New Deal</h5>
+              <form
+                id="add-deal-form"
+                method="POST"
+                action="/buyer_dashboard/{{ username }}"
+              >
+                <div class="mb-3">
+                  <label for="deal-description" class="form-label"
+                    >Deal Description</label
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="deal-description"
+                    name="description"
+                    placeholder="Enter deal description"
+                    required
+                  />
+                </div>
+                <div class="mb-3">
+                  <label for="deal-budget" class="form-label">Budget</label>
+                  <input
+                    type="number"
+                    class="form-control"
+                    id="deal-budget"
+                    name="budget"
+                    placeholder="Enter budget"
+                    required
+                  />
+                </div>
+                <button type="submit" class="btn btn-primary w-100">
+                  Add Deal
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+        <div
+          class="tab-pane fade"
+          id="closed-deals"
+          role="tabpanel"
+          aria-labelledby="closed-deals-tab"
+        >
+          <h3>Closed Deals</h3>
+          <p>Details of all completed deals and feedback will be shown here.</p>
+        </div>
+        <div
+          class="tab-pane fade"
+          id="previous-deals"
+          role="tabpanel"
+          aria-labelledby="previous-deals-tab"
+        >
+          <h3>Previous Deals</h3>
+          <p>A history of previous deals will be accessible here.</p>
+        </div>
+        <div
+          class="tab-pane fade"
+          id="overall-profit"
+          role="tabpanel"
+          aria-labelledby="overall-profit-tab"
+        >
+          <h3>Overall Profit</h3>
+          <p>
+            Summary of savings and other financial details will be shown here.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- JavaScript Files -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      // Wait for the DOM to fully load
+      document.addEventListener("DOMContentLoaded", function () {
+        function toggleBids(bidSectionId) {
+          const bidSection = document.getElementById(bidSectionId);
+          bidSection.classList.toggle("d-none");
+        }
+
+        function removeDeal(dealId) {
+          const dealCard = document.getElementById(dealId);
+          if (dealCard) {
+            dealCard.remove(); // Remove the deal card from the DOM
+          }
+        }
+      });
+    </script>
+  </body>
+</html>
