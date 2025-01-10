@@ -57,7 +57,7 @@ def buyer_dashboard(username):
         conn.commit()
 
     # Fetch all active deals
-    cur.execute("SELECT id, description, budget FROM flask.deals")
+    cur.execute("SELECT * FROM flask.deals")
     active_deals = cur.fetchall()
     cur.close()
     conn.close()
@@ -100,7 +100,7 @@ def remove_deal():
 def seller_interface():
     conn = get_db_connection()
     cur = conn.cursor()
-    cur.execute("SELECT id, description, budget, bid FROM flask.deals ORDER BY id")
+    cur.execute("SELECT * FROM flask.deals")
     deals = cur.fetchall()
     cur.close()
     conn.close()
@@ -114,7 +114,6 @@ def place_or_edit_bid():
     conn = get_db_connection()
     cur = conn.cursor()
     try:
-        # Check if a bid exists and update or insert accordingly
         cur.execute("SELECT bid FROM flask.deals WHERE id = %s", (deal_id,))
         existing_bid = cur.fetchone()
         if existing_bid and existing_bid[0]:
