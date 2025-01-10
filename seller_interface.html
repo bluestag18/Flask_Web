@@ -62,18 +62,18 @@
     <div class="container tabs-container">
       {% if deals %} {% for deal in deals %}
       <div class="deal-card">
-        <p><strong>Description:</strong> {{ deal.description }}</p>
-        <p><strong>Budget:</strong> ₹{{ deal.budget }}</p>
+        <p><strong>Description:</strong> {{ deal[1] }}</p>
+        <p><strong>Budget:</strong> ₹{{ deal[2] }}</p>
         <p>
-          <strong>Current Bid:</strong> ₹{{ deal.bid|default('No bid placed') }}
+          <strong>Current Bid:</strong> ₹{{ deal[3]|default('No bid placed') }}
         </p>
         <form action="{{ url_for('place_or_edit_bid') }}" method="POST">
-          <input type="hidden" name="deal_id" value="{{ deal.id }}" />
+          <input type="hidden" name="deal_id" value="{{ deal[0] }}" />
           <input
             type="number"
             name="bid_amount"
             placeholder="Enter your bid amount"
-            value="{{ deal.bid }}"
+            value="{{ deal[3] }}"
             required
           />
           <button type="submit" class="btn btn-primary">Place/Edit Bid</button>
