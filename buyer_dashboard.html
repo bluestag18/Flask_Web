@@ -73,13 +73,6 @@
         background-color: #fdfdfd;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
       }
-      .bid-card {
-        border: 1px solid #bbb;
-        padding: 10px;
-        margin-bottom: 10px;
-        background-color: #f7f7f7;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-      }
     </style>
   </head>
   <body>
@@ -110,48 +103,6 @@
             View Active Deals
           </button>
         </li>
-        <li class="nav-item" role="presentation">
-          <button
-            class="nav-link"
-            id="closed-deals-tab"
-            data-bs-toggle="tab"
-            data-bs-target="#closed-deals"
-            type="button"
-            role="tab"
-            aria-controls="closed-deals"
-            aria-selected="false"
-          >
-            Check Closed Deals
-          </button>
-        </li>
-        <li class="nav-item" role="presentation">
-          <button
-            class="nav-link"
-            id="previous-deals-tab"
-            data-bs-toggle="tab"
-            data-bs-target="#previous-deals"
-            type="button"
-            role="tab"
-            aria-controls="previous-deals"
-            aria-selected="false"
-          >
-            View Previous Deals
-          </button>
-        </li>
-        <li class="nav-item" role="presentation">
-          <button
-            class="nav-link"
-            id="overall-profit-tab"
-            data-bs-toggle="tab"
-            data-bs-target="#overall-profit"
-            type="button"
-            role="tab"
-            aria-controls="overall-profit"
-            aria-selected="false"
-          >
-            Check Overall Profit
-          </button>
-        </li>
       </ul>
 
       <div class="tab-content" id="buyerTabsContent">
@@ -174,19 +125,8 @@
                 >
                   <p><strong>Description:</strong> {{ deal[1] }}</p>
                   <p><strong>Budget:</strong> ₹{{ deal[2] }}</p>
+                  <p><strong>Bid:</strong> ₹{{ deal[3] }}</p>
                   <div style="display: flex; gap: 10px">
-                    <!-- Form for View Bids -->
-                    <form method="POST" action="/view_bids" style="margin: 0">
-                      <input
-                        type="hidden"
-                        name="deal_id"
-                        value="{{ deal[0] }}"
-                      />
-                      <button type="submit" class="btn btn-secondary btn-sm">
-                        View Bids
-                      </button>
-                    </form>
-
                     <!-- Remove Deal Button -->
                     <form method="POST" action="/remove_deal" style="margin: 0">
                       <input
@@ -203,105 +143,31 @@
                         Remove Deal
                       </button>
                     </form>
+                    <!-- Close Deal Button -->
+                    <form method="POST" action="/close_deal" style="margin: 0">
+                      <input
+                        type="hidden"
+                        name="deal_id"
+                        value="{{ deal[0] }}"
+                      />
+                      <button type="submit" class="btn btn-primary btn-sm">
+                        Close Deal
+                      </button>
+                    </form>
                   </div>
                 </li>
                 {% endfor %}
               </ul>
-
               {% else %}
               <p>No active deals found.</p>
               {% endif %}
             </div>
-
-            <!-- Add New Deal Form -->
-            <!-- Add New Deal Form -->
-            <div class="add-deal-form">
-              <h5>Add New Deal</h5>
-              <form
-                id="add-deal-form"
-                method="POST"
-                action="/buyer_dashboard/{{ username }}"
-              >
-                <div class="mb-3">
-                  <label for="deal-description" class="form-label"
-                    >Deal Description</label
-                  >
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="deal-description"
-                    name="description"
-                    placeholder="Enter deal description"
-                    required
-                  />
-                </div>
-                <div class="mb-3">
-                  <label for="deal-budget" class="form-label">Budget</label>
-                  <input
-                    type="number"
-                    class="form-control"
-                    id="deal-budget"
-                    name="budget"
-                    placeholder="Enter budget"
-                    required
-                  />
-                </div>
-                <button type="submit" class="btn btn-primary w-100">
-                  Add Deal
-                </button>
-              </form>
-            </div>
           </div>
-        </div>
-        <div
-          class="tab-pane fade"
-          id="closed-deals"
-          role="tabpanel"
-          aria-labelledby="closed-deals-tab"
-        >
-          <h3>Closed Deals</h3>
-          <p>Details of all completed deals and feedback will be shown here.</p>
-        </div>
-        <div
-          class="tab-pane fade"
-          id="previous-deals"
-          role="tabpanel"
-          aria-labelledby="previous-deals-tab"
-        >
-          <h3>Previous Deals</h3>
-          <p>A history of previous deals will be accessible here.</p>
-        </div>
-        <div
-          class="tab-pane fade"
-          id="overall-profit"
-          role="tabpanel"
-          aria-labelledby="overall-profit-tab"
-        >
-          <h3>Overall Profit</h3>
-          <p>
-            Summary of savings and other financial details will be shown here.
-          </p>
         </div>
       </div>
     </div>
 
     <!-- JavaScript Files -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-      // Wait for the DOM to fully load
-      document.addEventListener("DOMContentLoaded", function () {
-        function toggleBids(bidSectionId) {
-          const bidSection = document.getElementById(bidSectionId);
-          bidSection.classList.toggle("d-none");
-        }
-
-        function removeDeal(dealId) {
-          const dealCard = document.getElementById(dealId);
-          if (dealCard) {
-            dealCard.remove(); // Remove the deal card from the DOM
-          }
-        }
-      });
-    </script>
   </body>
 </html>
