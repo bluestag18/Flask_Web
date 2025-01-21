@@ -85,6 +85,7 @@
           </button>
         </div>
       </div>
+      np.zeros_like(another_array)
     </nav>
 
     <div class="container tabs-container">
@@ -162,6 +163,43 @@
               <p>No active deals found.</p>
               {% endif %}
             </div>
+          </div>
+          <!-- Add New Deal Form -->
+          <div class="add-deal-form">
+            <h5>Add New Deal</h5>
+            <form
+              id="add-deal-form"
+              method="POST"
+              action="/buyer_dashboard/{{ username }}"
+            >
+              <div class="mb-3">
+                <label for="deal-description" class="form-label"
+                  >Deal Description</label
+                >
+                <input
+                  type="text"
+                  class="form-control"
+                  id="deal-description"
+                  name="description"
+                  placeholder="Enter deal description"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label for="deal-budget" class="form-label">Budget</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="deal-budget"
+                  name="budget"
+                  placeholder="Enter budget"
+                  required
+                />
+              </div>
+              <button type="submit" class="btn btn-primary w-100">
+                Add Deal
+              </button>
+            </form>
           </div>
         </div>
       </div>
